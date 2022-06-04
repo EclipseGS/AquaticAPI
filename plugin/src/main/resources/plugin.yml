@@ -1,0 +1,16 @@
+name: VisualAPI
+main: org.aquatic.initdev.plugin.VisualAPI
+version: 1.0.0
+api-version: 1.13
+authors: [ InitDev ]
+description: API for send Titles and ActionBars, also give support to HEX colors, and more.
+commands:
+  title:
+    description: -> Command for send titles.
+    aliases: []
+  disconnect:
+    description: -> Command for disconnect players.
+    aliases: [ close ]
+  actionbar:
+    description: -> Command for send actionbars.
+    aliases: [ ab ]
