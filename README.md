@@ -4,28 +4,22 @@
 
 API provided for members of Aquatic Studios for the plugins development, versions supported: **1.8x - 1.19** (Spigot/Paper).
 
-How to import the API to your project?
-
-## Maven:
-  
-### Repository:
-  ```xml
-    <repositories>
-      <repository>
-        <id>jitpack.io</id>
-        <url>https://jitpack.io</url>
-      </repository>
-    </repositories>
-  ```
-    
-### Dependency:
-  ```xml
-    <dependencies>
-      <dependency>
-        <groupId>com.github.InitDev06</groupId>
-	<artifactId>AquaticAPI</artifactId>
-	<version>1.0.0</version>
-        <scope>provided</scope>
-      </dependency>
-    </dependencies>
-  ```
+**How to import the API to your project:**
+```xml
+<repositories>
+    <repository>
+        <id>jitpack.id</id>
+	<url>https://jitpack.io</url>
+    </repository>
+</repositories>
+```
+```xml
+<dependencies>
+   <dependency>
+      <groupId>com.github.InitDev06</groupId>
+      <artifactId>AquaticAPI</artifactId>
+      <version>1.0.0</version>
+      <scope>provided</scope>
+   </dependency>
+</dependencies>
+```
