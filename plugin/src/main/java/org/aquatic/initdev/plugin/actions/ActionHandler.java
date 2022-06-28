@@ -104,7 +104,7 @@ public final class ActionHandler implements ActionModel {
 			// Print the error.
 			e.printStackTrace();
 
-			// Could not send the title.
+			// Could not parse the parameters
 			System.out.println("[AquaticAPI] Action 'effect' return exit '1'.");
 			return;
 		}
