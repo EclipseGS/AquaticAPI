@@ -16,10 +16,10 @@ API provided for members of Aquatic Studios for the plugins development, version
 ```xml
 <dependencies>
    <dependency>
-      <groupId>com.github.InitDev06</groupId>
-      <artifactId>AquaticAPI</artifactId>
-      <version>1.0.0</version>
-      <scope>provided</scope>
+       <groupId>com.github.InitDev06</groupId>
+       <artifactId>AquaticAPI</artifactId>
+       <version>1.0.0</version>
+       <scope>provided</scope>
    </dependency>
 </dependencies>
 ```
