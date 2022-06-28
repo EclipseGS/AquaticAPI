@@ -23,8 +23,8 @@ How to import the API to your project?
     <dependencies>
       <dependency>
         <groupId>com.github.InitDev06</groupId>
-	      <artifactId>AquaticAPI</artifactId>
-	      <version>1.0.0</version>
+	<artifactId>AquaticAPI</artifactId>
+	<version>1.0.0</version>
         <scope>provided</scope>
       </dependency>
     </dependencies>
