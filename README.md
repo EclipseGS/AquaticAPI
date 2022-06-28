@@ -4,7 +4,7 @@
 
 API provided for members of Aquatic Studios for the plugins development, versions supported: **1.8x - 1.19** (Spigot/Paper).
 
-**How to import the API to your project:**
+**How to import the API to your project with Maven:**
 ```xml
 <repositories>
     <repository>
@@ -22,4 +22,19 @@ API provided for members of Aquatic Studios for the plugins development, version
        <scope>provided</scope>
    </dependency>
 </dependencies>
+```
+
+**How to import the API to your project with Gradle:**
+```groovy
+repositories {
+    mavenCentral()
+    maven { url = 'https://jitpack.io' }
+}
+```
+
+```groovy
+dependencies {
+    compileOnly 'com.github.InitDev06:AquaticAPI:1.0.0'
+    implementation 'com.github.User:Repo:Tag'
+}
 ```
