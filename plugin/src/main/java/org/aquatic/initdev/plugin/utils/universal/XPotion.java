@@ -53,7 +53,7 @@ import java.util.concurrent.ThreadLocalRandom;
  * Potions: https://minecraft.gamepedia.com/Potion
  *
  * @author Crypto Morin
- * @version 3.0.0
+ * @version 3.1.0
  * @see PotionEffect
  * @see PotionEffectType
  * @see PotionType
@@ -65,6 +65,7 @@ public enum XPotion {
 	CONDUIT_POWER("CONDUIT", "POWER_CONDUIT"),
 	CONFUSION("NAUSEA", "SICKNESS", "SICK"),
 	DAMAGE_RESISTANCE("RESISTANCE", "ARMOR", "DMG_RESIST", "DMG_RESISTANCE"),
+	DARKNESS,
 	DOLPHINS_GRACE("DOLPHIN", "GRACE"),
 	FAST_DIGGING("HASTE", "SUPER_PICK", "DIGFAST", "DIG_SPEED", "QUICK_MINE", "SHARP"),
 	FIRE_RESISTANCE("FIRE_RESIST", "RESIST_FIRE", "FIRE_RESISTANCE"),
@@ -106,9 +107,9 @@ public enum XPotion {
 	 * @since 1.1.0
 	 */
 	public static final Set<XPotion> DEBUFFS = Collections.unmodifiableSet(EnumSet.of(
-																																						 BAD_OMEN, BLINDNESS, CONFUSION, HARM, HUNGER, LEVITATION, POISON,
-																																						 SLOW, SLOW_DIGGING, UNLUCK, WEAKNESS, WITHER)
-																																				);
+		BAD_OMEN, BLINDNESS, CONFUSION, HARM, HUNGER, LEVITATION, POISON,
+		SLOW, SLOW_DIGGING, UNLUCK, WEAKNESS, WITHER)
+	);
 
 	/**
 	 * Efficient mapping to get {@link XPotion} from a {@link PotionEffectType}
@@ -316,8 +317,8 @@ public enum XPotion {
 		Objects.requireNonNull(entity, "Cannot throw potion from null entity");
 		@SuppressWarnings("deprecation")
 		ItemStack potion = Material.getMaterial("SPLASH_POTION") == null ?
-											 new ItemStack(Material.POTION, 1, (short) 16398) : // or 16384?
-											 new ItemStack(Material.SPLASH_POTION);
+		                   new ItemStack(Material.POTION, 1, (short) 16398) : // or 16384?
+		                   new ItemStack(Material.SPLASH_POTION);
 		// TODO check why the fuck Lingering potion isn't supported.
 
 		PotionMeta meta = (PotionMeta) potion.getItemMeta();
@@ -359,7 +360,7 @@ public enum XPotion {
 
 		meta.setColor(color);
 		meta.setDisplayName(type == Material.POTION ? "Potion" : type == Material.SPLASH_POTION ? "Splash Potion" :
-																														 type == Material.TIPPED_ARROW ? "Tipped Arrow" : "Lingering Potion");
+		                                                         type == Material.TIPPED_ARROW ? "Tipped Arrow" : "Lingering Potion");
 		if (effects != null) for (PotionEffect effect : effects) meta.addCustomEffect(effect, true);
 		item.setItemMeta(meta);
 		return item;

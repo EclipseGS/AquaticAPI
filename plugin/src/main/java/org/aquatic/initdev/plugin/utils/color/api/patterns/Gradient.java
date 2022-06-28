@@ -2,8 +2,8 @@ package org.aquatic.initdev.plugin.utils.color.api.patterns;
 
 import org.aquatic.initdev.plugin.utils.color.api.IridiumAPI;
 import org.aquatic.initdev.plugin.utils.color.api.Pattern;
+import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
 import java.awt.Color;
 import java.util.regex.Matcher;
 
@@ -17,7 +17,7 @@ public final class Gradient implements Pattern {
 	java.util.regex.Pattern pattern = java.util.regex.Pattern.compile("<G:([0-9A-Fa-f]{6})>(.*?)" +
 																																		"</G:([0-9A-Fa-f]{6})>");
 	@Override
-	public String process(@Nonnull String string) {
+	public String process(@NotNull String string) {
 		Matcher matcher = pattern.matcher(string);
 		while (matcher.find()) {
 			String start = matcher.group(1);

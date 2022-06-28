@@ -1,40 +1,15 @@
-/*
- * MIT License
- *
- * Copyright (c) 2022 InitDev
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- * 
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
- * 
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
- */
 package org.aquatic.initdev.plugin.actions;
 
-import org.aquatic.initdev.plugin.VisualAPI;
-import org.aquatic.initdev.plugin.utils.Log;
-import org.aquatic.initdev.plugin.utils.Utils;
+import org.aquatic.initdev.plugin.AquaticAPI;
 import org.aquatic.initdev.plugin.utils.color.Text;
 import org.aquatic.initdev.plugin.utils.universal.XPotion;
 import org.aquatic.initdev.plugin.utils.universal.XSound;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 import java.util.Collection;
@@ -47,9 +22,9 @@ import java.util.Collection;
  */
 public final class ActionHandler implements ActionModel {
 
-	private final VisualAPI main;
+	private final AquaticAPI main;
 
-	public ActionHandler() { this.main = JavaPlugin.getPlugin(VisualAPI.class); }
+	public ActionHandler(@NotNull AquaticAPI main) { this.main = main; }
 
 	/**
 	 * Replay a sound to player.
@@ -58,14 +33,19 @@ public final class ActionHandler implements ActionModel {
 	 * @param player Player Parameter.
 	 */
 	@Override
-	public void sound(@Nonnull String s, @Nonnull Player player) {
-		// Replacing the Action identifier.
-		s = s.replace(ActionFormat.SOUND.getIdentifier(), "");
+	public void sound(@NotNull String s, @NotNull Player player) {
+		// Clearing the Action identifier.
+		s = s.substring(9);
+
 		// Splitting the Action string.
 		String[] separators = s.split(":", 3);
+
 		// Getting the sound.
-		Sound sound = XSound.matchXSound(separators[0]).get().parseSound();
+		Sound sound = XSound.matchXSound(separators[0])
+			.get()
+			.parseSound();
 		assert sound != null;
+
 		// Sound int parameters.
 		int volume;
 		int pitch;
@@ -75,17 +55,19 @@ public final class ActionHandler implements ActionModel {
 			pitch = Integer.parseInt(separators[2]);
 		} catch (NumberFormatException e) {
 			// If an error happens...
-			Log.asError("Failed to parse the 'Sound Action' int parameters.");
+			System.out.println("[AquaticAPI] Failed to parse the 'Sound Action' int parameters.");
+
 			// Print the error.
 			e.printStackTrace();
+
 			// Could not send the title.
-			Log.asInfo("Action 'sound' return '1'.");
+			System.out.println("[AquaticAPI] Action 'sound' return exit '1'.");
 			return;
 		}
+
 		// Finally, replay the sound.
+		// And yes can replay the sound.
 		player.playSound(player.getLocation(), sound, volume, pitch);
-		// Yes can replay the sound.
-		Log.asInfo("Action 'sound' return '0'.");
 	}
 
 	/**
@@ -96,13 +78,18 @@ public final class ActionHandler implements ActionModel {
 	 */
 	@Override
 	public void effect(@Nonnull String s, @Nonnull Player player) {
-		// Replacing the Action identifier.
-		s = s.replace(ActionFormat.EFFECT.getIdentifier(), "");
+		// Clearing the Action identifier.
+		s = s.substring(10);
+
 		// Splitting the Action string.
 		String[] separators = s.split(":", 3);
+
 		// Getting the effect.
-		PotionEffectType effect = XPotion.matchXPotion(separators[0]).get().getPotionEffectType();
+		PotionEffectType effect = XPotion.matchXPotion(separators[0])
+			.get()
+			.getPotionEffectType();
 		assert effect != null;
+
 		// Effect int parameters.
 		int duration;
 		int amplifier;
@@ -112,25 +99,18 @@ public final class ActionHandler implements ActionModel {
 			amplifier = Integer.parseInt(separators[2]);
 		} catch (NumberFormatException e) {
 			// If an error happens...
-			Log.asError("Failed to parse the 'Effect Action' int parameters.");
+			System.out.println("[AquaticAPI] Failed to parse the 'Effect Action' int parameters.");
+
 			// Print the error.
 			e.printStackTrace();
+
 			// Could not send the title.
-			Log.asInfo("Action 'effect' return '1'.");
+			System.out.println("[AquaticAPI] Action 'effect' return exit '1'.");
 			return;
 		}
-		// Check if is the primary thread.
-		if (Bukkit.isPrimaryThread()) {
-			// Add the potion effect.
-			player.addPotionEffect(new PotionEffect(effect, duration, amplifier));
-			return;
-		}
-		// Is not the primary thread.
-		main.getServer().getScheduler().runTaskLater(main, () -> {
-			player.addPotionEffect(new PotionEffect(effect, duration, amplifier));
-		}, 1L);
-		// Yes can give the effect.
-		Log.asInfo("Action 'effect' return '0'.");
+
+		// Add the potion effect, can?
+		player.addPotionEffect(new PotionEffect(effect, duration, amplifier));
 	}
 
 	/**
@@ -141,14 +121,17 @@ public final class ActionHandler implements ActionModel {
 	 */
 	@Override
 	public void title(@Nonnull String s, @Nonnull Player player) {
-		// Replacing the Action identifier.
-		s = s.replace(ActionFormat.TITLE.getIdentifier(), "");
+		// Clearing the Action identifier.
+		s = s.substring(9);
+
 		// Splitting the Action string.
 		String[] separators = s.split(":", 5);
+
 		// Getting the title.
-		String title = Text.color(separators[0]);
+		String title = separators[0];
 		// Getting the subtitle, first check if this is empty, else not, get and add the colors.
-		String subtitle = separators[1].isEmpty() ? null : Text.color(separators[1]);
+		String subtitle = separators[1].isEmpty() ? null : separators[1];
+
 		// Time Parameters of Title.
 		int fadeIn;
 		int stay;
@@ -160,17 +143,28 @@ public final class ActionHandler implements ActionModel {
 			fadeOut = Integer.parseInt(separators[4]);
 		} catch (NumberFormatException e) {
 			// If an error happens...
-			Log.asError("Failed to parse the 'Title Action' int parameters.");
+			System.out.println("[AquaticAPI] Failed to parse the 'Title Action' int parameters.");
+
 			// Print the error.
 			e.printStackTrace();
+
 			// Could not send the title.
-			Log.asInfo("Action 'disconnect' return '1'.");
+			System.out.println("[AquaticAPI] Action 'disconnect' return exit '1'.");
 			return;
 		}
-		// Finally, send the title.
-		Utils.title(player, fadeIn, stay, fadeOut, title, subtitle);
-		// Yes can send the title.
-		Log.asInfo("Action 'disconnect' return '0'.");
+
+		// Finally, send the title
+		// And yes can send the title.
+		main.getHandler()
+			.getServer()
+			.sendTitle(
+				player,
+				fadeIn,
+				stay,
+				fadeOut,
+				title,
+				subtitle
+			);
 	}
 
 	/**
@@ -181,25 +175,17 @@ public final class ActionHandler implements ActionModel {
 	 */
 	@Override
 	public void actionbar(@Nonnull String s, @Nonnull Player player) {
-		// Replacing the Action identifier.
-		s = s.replace(ActionFormat.ACTION_BAR.getIdentifier(), "");
-		// Getting the message.
-		String message = Text.color(s);
-		// Try of send the actionbar.
-		try {
-			// Send the actionbar.
-			Utils.actionBar(player, message);
-		} catch (NoSuchMethodException e) {
-			// An error happens...
-			Log.asError("Failed to send the actionbar.");
-			// Print the error.
-			e.printStackTrace();
-			// Could not send the actionbar.
-			Log.asInfo("Action 'actionbar' return '1'.");
-			return;
-		}
-		// Yes can send the actionbar.
-		Log.asInfo("Action 'actionbar' return '0'.");
+		// Clearing the Action identifier.
+		s = s.substring(13);
+
+		// Getting the message and
+		// send the actionbar.
+		main.getHandler()
+			.getServer()
+			.actionBar(
+				player,
+				s
+			);
 	}
 
 	/**
@@ -210,24 +196,17 @@ public final class ActionHandler implements ActionModel {
 	 */
 	@Override
 	public void disconnect(@Nonnull String s, @Nonnull Player player) {
-		// Replacing the Action identifier.
-		s = s.replace(ActionFormat.DISCONNECT.getIdentifier(), "");
-		// Getting the message.
-		String message = Text.color(s);
-		// Try of disconnect to player.
-		try {
-			Utils.disconnect(player, message);
-		} catch (NoSuchMethodException e) {
-			// An error happens...
-			Log.asError("Failed to disconnect to player.");
-			// Print the error.
-			e.printStackTrace();
-			// Could not disconnect to player.
-			Log.asInfo("Action 'disconnect' return '1'.");
-			return;
-		}
-		// Yes can disconnect to player.
-		Log.asInfo("Action 'disconnect' return '0'.");
+		// Clearing the Action identifier.
+		s = s.substring(14);
+
+		// Getting the message and
+		// Disconnect to player.
+		main.getHandler()
+			.getServer()
+			.closeConnection(
+				player,
+				s
+			);
 	}
 
 	/**
@@ -238,36 +217,30 @@ public final class ActionHandler implements ActionModel {
 	 */
 	@Override
 	public void command(@Nonnull String s, @Nonnull Player player) {
-		// Replacing the Action identifier.
-		s = s.replace(ActionFormat.COMMAND.getIdentifier(), "");
+		// Clearing the Action identifier.
+		s = s.substring(11);
+
 		// Splitting the Action string.
 		String[] separators = s.split(":", 2);
+
 		// Getting the command.
 		String command = Text.color(separators[0]);
+
 		// Getting the console boolean.
 		boolean fromConsole = Boolean.parseBoolean(separators[1]);
 		// Check if the boolean is true.
 		if (fromConsole) {
-			// Check if is the primary server thread.
-			if (main.getServer().isPrimaryThread()) {
-				main.getServer().dispatchCommand(main.getServer().getConsoleSender(), command);
-			} else {
-				// It's not the primary thread.
-				main.getServer().getScheduler().runTaskLater(main, () -> {
-					main.getServer().dispatchCommand(main.getServer().getConsoleSender(), command);
-				}, 1L);
-			}
+			// Dispatch the command from console.
+			Bukkit.dispatchCommand(
+				Bukkit.getConsoleSender(),
+				command
+			);
 			return;
 		}
+
 		// The boolean is false.
-		// Check if is the primary server thread.
-		if (main.getServer().isPrimaryThread()) player.performCommand(command);
-		else {
-			// It's not the primary thread.
-			main.getServer().getScheduler().runTaskLater(main, () -> player.performCommand(command), 1L);
-		}
-		// Yes can perform the command.
-		Log.asInfo("Action 'command' return '0'.");
+		// Dispatch the command from the player.
+		player.performCommand(command);
 	}
 
 	/**
@@ -278,14 +251,12 @@ public final class ActionHandler implements ActionModel {
 	 */
 	@Override
 	public void message(@Nonnull String s, @Nonnull Player player) {
-		// Replacing the Action identifier.
-		s = s.replace(ActionFormat.COMMAND.getIdentifier(), "");
-		// Getting the message.
-		String message = Text.color(s);
-		// Sending the message.
-		player.sendMessage(Text.color(message));
-		// Yes can send the message.
-		Log.asInfo("Action 'message' return '0'.");
+		// Clearing the Action identifier.
+		s = s.substring(11);
+
+		// Getting the message and
+		// sending the message.
+		player.sendMessage(Text.color(s));
 	}
 
 	/**
@@ -296,14 +267,14 @@ public final class ActionHandler implements ActionModel {
 	 */
 	@Override
 	public void broadcast(@Nonnull String s, @Nonnull Collection<? extends Player> players) {
-		// Replacing the Action identifier.
-		s = s.replace(ActionFormat.BROADCAST.getIdentifier(), "");
+		// Clearing the Action identifier.
+		s = s.substring(13);
+
 		// Getting the message.
 		String message = Text.color(s);
-		// Sending the message.
+
+		// Getting all players and sending the message.
 		for (Player player : players) player.sendMessage(message);
-		// Yes can send the message.
-		Log.asInfo("Action 'broadcast' return '0'.");
 	}
 
 	/**
@@ -313,14 +284,12 @@ public final class ActionHandler implements ActionModel {
 	 */
 	@Override
 	public void console(@Nonnull String s) {
-		// Replacing the Action identifier.
-		s = s.replace(ActionFormat.CONSOLE.getIdentifier(), "");
-		// Getting the message.
-		String message = Text.color(s);
-		// Sending the message.
-		main.getServer().getConsoleSender().sendMessage(message);
-		// Yes can send the message.
-		Log.asInfo("Action 'console' return '0'.");
+		// Clearing the Action identifier.
+		s = s.substring(11);
+
+		// Getting the message and
+		// sending the message.
+		Bukkit.getConsoleSender().sendMessage(Text.color(s));
 	}
 
 	/**
@@ -336,48 +305,57 @@ public final class ActionHandler implements ActionModel {
 			sound(s, player);
 			return;
 		}
+
 		// The string starts with the '{#Effect}' identifier?
 		if (s.startsWith(ActionFormat.EFFECT.getIdentifier())) {
 			effect(s, player);
 			return;
 		}
+
 		// The string starts with the '{#Title}'  identifier?
 		if (s.startsWith(ActionFormat.TITLE.getIdentifier())) {
 			title(s, player);
 			return;
 		}
+
 		// The string starts with the '{#ActionBar}' identifier?
 		if (s.startsWith(ActionFormat.ACTION_BAR.getIdentifier())) {
 			actionbar(s, player);
 			return;
 		}
+
 		// The string starts with the '{#Disconnect}'  identifier?
 		if (s.startsWith(ActionFormat.DISCONNECT.getIdentifier())) {
 			disconnect(s, player);
 			return;
 		}
+
 		// The string starts with the '{#Command}' identifier?
 		if (s.startsWith(ActionFormat.COMMAND.getIdentifier())) {
 			command(s, player);
 			return;
 		}
+
 		// The string starts with the '{#Message}'  identifier?
 		if (s.startsWith(ActionFormat.MESSAGE.getIdentifier())) {
 			message(s, player);
 			return;
 		}
+
 		// The string starts with the '{#Broadcast}' identifier?
 		if (s.startsWith(ActionFormat.BROADCAST.getIdentifier())) {
-			broadcast(s, main.getServer().getOnlinePlayers());
+			broadcast(s, Bukkit.getOnlinePlayers());
 			return;
 		}
+
 		// The string starts with the '{#Console}'  identifier?
 		if (s.startsWith(ActionFormat.CONSOLE.getIdentifier())) {
 			console(s);
 			return;
 		}
+
 		// The action identifier is misspelled or doesn't exist.
-		Log.asError("The action '" + s + "' doesn't exist.");
-		Log.asError("return '0'.");
+		System.out.println("[AquaticAPI] The action '" + s + "' doesn't exist.");
+		System.out.println("[AquaticAPI] checkAndExecute() method returns exit '1'.");
 	}
 }

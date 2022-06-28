@@ -7,19 +7,19 @@ import org.aquatic.initdev.plugin.utils.color.api.patterns.Gradient;
 import org.aquatic.initdev.plugin.utils.color.api.patterns.Rainbow;
 import org.aquatic.initdev.plugin.utils.color.api.patterns.Solid;
 import org.bukkit.Bukkit;
+import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
 import java.awt.Color;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
  * Copyright © 2022.
  *
  * @since 03-06-2022
  */
+@SuppressWarnings("deprecation")
 public final class IridiumAPI {
 	
 	/**
@@ -38,39 +38,47 @@ public final class IridiumAPI {
 	 */
 	private static final boolean SUPPORTS_RGB = VERSION >= 16;
 	
-	private static final List<String> SPECIAL_COLORS = Arrays.asList("&l", "&n", "&o", "&k", "&m",
-																																	 "§l", "§n", "§o", "§k", "§m");
+	private static final List<String> SPECIAL_COLORS = Arrays.asList(
+		"&l",
+		"&n",
+		"&o",
+		"&k",
+		"&m"
+	);
 	
 	/**
 	 * Cached result of all legacy colors.
 	 *
 	 * @since 1.0.0
 	 */
-	private static final Map<Color, ChatColor> COLORS =
-			ImmutableMap.<Color, ChatColor>builder() .put(new Color(0), ChatColor.getByChar('0'))
-									.put(new Color(170), ChatColor.getByChar('1'))
-									.put(new Color(43520), ChatColor.getByChar('2'))
-									.put(new Color(43690), ChatColor.getByChar('3'))
-									.put(new Color(11141120), ChatColor.getByChar('4'))
-									.put(new Color(11141290), ChatColor.getByChar('5'))
-									.put(new Color(16755200), ChatColor.getByChar('6'))
-									.put(new Color(11184810), ChatColor.getByChar('7'))
-									.put(new Color(5592405), ChatColor.getByChar('8'))
-									.put(new Color(5592575), ChatColor.getByChar('9'))
-									.put(new Color(5635925), ChatColor.getByChar('a'))
-									.put(new Color(5636095), ChatColor.getByChar('b'))
-									.put(new Color(16733525), ChatColor.getByChar('c'))
-									.put(new Color(16733695), ChatColor.getByChar('d'))
-									.put(new Color(16777045), ChatColor.getByChar('e'))
-									.put(new Color(16777215), ChatColor.getByChar('f')).build();
+	private static final Map<Color, ChatColor> COLORS = ImmutableMap.<Color, ChatColor>builder()
+				.put(new Color(0), ChatColor.getByChar('0'))
+				.put(new Color(170), ChatColor.getByChar('1'))
+				.put(new Color(43520), ChatColor.getByChar('2'))
+				.put(new Color(43690), ChatColor.getByChar('3'))
+				.put(new Color(11141120), ChatColor.getByChar('4'))
+				.put(new Color(11141290), ChatColor.getByChar('5'))
+				.put(new Color(16755200), ChatColor.getByChar('6'))
+				.put(new Color(11184810), ChatColor.getByChar('7'))
+				.put(new Color(5592405), ChatColor.getByChar('8'))
+				.put(new Color(5592575), ChatColor.getByChar('9'))
+				.put(new Color(5635925), ChatColor.getByChar('a'))
+				.put(new Color(5636095), ChatColor.getByChar('b'))
+				.put(new Color(16733525), ChatColor.getByChar('c'))
+				.put(new Color(16733695), ChatColor.getByChar('d'))
+				.put(new Color(16777045), ChatColor.getByChar('e'))
+				.put(new Color(16777215), ChatColor.getByChar('f')).build();
 	
 	/**
 	 * Cached result of patterns.
 	 *
 	 * @since 1.0.2
 	 */
-	private static final List<Pattern> PATTERNS = Arrays.asList(new Gradient(),new Solid(),
-																															new Rainbow());
+	private static final List<Pattern> PATTERNS = Arrays.asList(
+		new Gradient(),
+		new Solid(),
+		new Rainbow()
+	);
 	
 	/**
 	 * Processes a string to add color to it.
@@ -79,26 +87,12 @@ public final class IridiumAPI {
 	 * @param string The string we want to process
 	 * @since 1.0.0
 	 */
-	@Nonnull
+	@NotNull
 	public static String process(String string) {
 		for (Pattern pattern : PATTERNS) string = pattern.process(string);
-		
+
 		string = ChatColor.translateAlternateColorCodes('&', string);
 		return string;
-	}
-	
-	/**
-	 * Processes multiple strings in a list.
-	 *
-	 * @param strings The list of the strings we are processing
-	 * @return The list of processed strings
-	 * @since 1.0.3
-	 */
-	@Nonnull
-	public static List<String> process(@Nonnull List<String> strings) {
-		return strings.stream()
-									.map(IridiumAPI::process)
-									.collect(Collectors.toList());
 	}
 	
 	/**
@@ -108,8 +102,8 @@ public final class IridiumAPI {
 	 * @param color  The color we want to set it to
 	 * @since 1.0.0
 	 */
-	@Nonnull
-	public static String color(@Nonnull String string, @Nonnull Color color) {
+	@NotNull
+	private static String color(@NotNull String string, @NotNull Color color) {
 		return (SUPPORTS_RGB
 						? ChatColor.of(color)
 						: getClosestColor(color)) + string;
@@ -123,8 +117,8 @@ public final class IridiumAPI {
 	 * @param end    The ending gradiant
 	 * @since 1.0.0
 	 */
-	@Nonnull
-	public static String color(@Nonnull String string, @Nonnull Color start, @Nonnull Color end) {
+	@NotNull
+	public static String color(@NotNull String string, @NotNull Color start, @NotNull Color end) {
 		String originalString = string;
 		
 		ChatColor[] colors = createGradient(start, end, withoutSpecialChar(string).length());
@@ -138,8 +132,8 @@ public final class IridiumAPI {
 	 * @param saturation The saturation of the rainbow colors
 	 * @since 1.0.3
 	 */
-	@Nonnull
-	public static String rainbow(@Nonnull String string, float saturation) {
+	@NotNull
+	public static String rainbow(@NotNull String string, float saturation) {
 		String originalString = string;
 		
 		ChatColor[] colors = createRainbow(withoutSpecialChar(string).length(), saturation);
@@ -152,8 +146,8 @@ public final class IridiumAPI {
 	 * @param string The hex code of the color
 	 * @since 1.0.0
 	 */
-	@Nonnull
-	public static ChatColor getColor(@Nonnull String string) {
+	@NotNull
+	public static ChatColor getColor(@NotNull String string) {
 		return SUPPORTS_RGB
 					 ? ChatColor.of(new Color(Integer.parseInt(string, 16)))
 					 : getClosestColor(new Color(Integer.parseInt(string, 16)));
@@ -167,18 +161,20 @@ public final class IridiumAPI {
 	 * @return The stripped string without color codes
 	 * @since 1.0.5
 	 */
-	@Nonnull
-	public static String stripColorFormatting(@Nonnull String string) {
+	@NotNull
+	private static String stripColorFormatting(@NotNull String string) {
 		return string.replaceAll( "<#[0-9A-F]{6}>|[&§][a-f0-9lnokm]|<[/]?[A-Z]{5,8}(:[0-9A-F]{6})" +
 															"?[0-9]*>", "");
 	}
 	
-	@Nonnull
-	private static String apply(@Nonnull String source, ChatColor[] colors) {
+	@NotNull
+	private static String apply(@NotNull String source, ChatColor[] colors) {
 		StringBuilder specialColors = new StringBuilder();
 		StringBuilder stringBuilder = new StringBuilder();
 		String[] characters = source.split("");
+
 		int outIndex = 0;
+
 		for (int i = 0; i < characters.length; i++) {
 			if (characters[i].equals("&") || characters[i].equals("§")) {
 				if (i + 1 < characters.length) {
@@ -188,17 +184,26 @@ public final class IridiumAPI {
 						specialColors.append(characters[i + 1]);
 					}
 					i++;
-				} else stringBuilder.append(colors[outIndex++]).append(specialColors).append(characters[i]);
-			} else stringBuilder.append(colors[outIndex++]).append(specialColors).append(characters[i]);
+				} else {
+					stringBuilder.append(colors[outIndex++])
+						.append(specialColors)
+						.append(characters[i]);
+				}
+			} else {
+				stringBuilder.append(colors[outIndex++])
+					.append(specialColors)
+					.append(characters[i]);
+			}
 		}
 		return stringBuilder.toString();
 	}
 	
-	@Nonnull
-	private static String withoutSpecialChar(@Nonnull String source) {
+	@NotNull
+	private static String withoutSpecialChar(@NotNull String source) {
 		String workingString = source;
+
 		for (String color : SPECIAL_COLORS) {
-			if (workingString.contains(color)) workingString = workingString.replace(color, "");
+			if (workingString.contains(color)) workingString = workingString.substring(2);
 		}
 		return workingString;
 	}
@@ -211,13 +216,14 @@ public final class IridiumAPI {
 	 * @return The array of colors
 	 * @since 1.0.3
 	 */
-	@Nonnull
+	@NotNull
 	private static ChatColor[] createRainbow(int step, float saturation) {
 		ChatColor[] colors = new ChatColor[step];
 		double colorStep = (1.00 / step);
 		
 		for (int i = 0; i < step; i++) {
 			Color color = Color.getHSBColor((float) (colorStep * i), saturation, saturation);
+
 			if (SUPPORTS_RGB) colors[i] = ChatColor.of(color);
 			else colors[i] = getClosestColor(color);
 		}
@@ -234,12 +240,14 @@ public final class IridiumAPI {
 	 * @author TheViperShow
 	 * @since 1.0.0
 	 */
-	@Nonnull
-	private static ChatColor[] createGradient(@Nonnull Color start, @Nonnull Color end, int step) {
+	@NotNull
+	private static ChatColor[] createGradient(@NotNull Color start, @NotNull Color end, int step) {
 		ChatColor[] colors = new ChatColor[step];
+
 		int stepR = Math.abs(start.getRed() - end.getRed()) / (step - 1);
 		int stepG = Math.abs(start.getGreen() - end.getGreen()) / (step - 1);
 		int stepB = Math.abs(start.getBlue() - end.getBlue()) / (step - 1);
+
 		int[] direction = new int[] {
 				start.getRed() < end.getRed() ? +1 : -1,
 				start.getGreen() < end.getGreen() ? +1 : -1,
@@ -247,7 +255,11 @@ public final class IridiumAPI {
 		};
 		
 		for (int i = 0; i < step; i++) {
-			Color color = new Color(start.getRed() + ((stepR * i) * direction[0]), start.getGreen() + ((stepG * i) * direction[1]), start.getBlue() + ((stepB * i) * direction[2]));
+			Color color =
+				new Color(start.getRed() + ((stepR * i) * direction[0]),
+				          start.getGreen() + ((stepG * i) * direction[1]),
+				          start.getBlue() + ((stepB * i) * direction[2]));
+
 			if (SUPPORTS_RGB) colors[i] = ChatColor.of(color);
 			else colors[i] = getClosestColor(color);
 		}
@@ -261,7 +273,7 @@ public final class IridiumAPI {
 	 * @param color The color we want to transform
 	 * @since 1.0.0
 	 */
-	@Nonnull
+	@NotNull
 	private static ChatColor getClosestColor(Color color) {
 		Color nearestColor = null;
 		double nearestDistance = Integer.MAX_VALUE;
@@ -286,7 +298,7 @@ public final class IridiumAPI {
 	 * @return the simplified major version.
 	 * @since 1.0.0
 	 */
-	public static int getVersion() {
+	private static int getVersion() {
 		String version = Bukkit.getVersion();
 		Validate.notEmpty(version,"Cannot get major Minecraft version from null or empty string");
 		
