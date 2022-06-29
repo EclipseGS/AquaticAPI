@@ -4,7 +4,6 @@ import lombok.Getter;
 import org.aquatic.initdev.plugin.actions.ActionHandler;
 import org.aquatic.initdev.plugin.nms.Handler;
 import org.aquatic.initdev.plugin.utils.Utils;
-import org.bukkit.Bukkit;
 
 /**
  * Main Class API Spigot - Copyright © 2022.
@@ -16,7 +15,7 @@ public final class AquaticAPI {
 	@Getter
 	private final String author = "InitDev";
 	@Getter
-	private final String currentVersion = "1.0.0";
+	private final String currentVersion = "1.0.2";
 
 	@Getter
 	private Handler handler;

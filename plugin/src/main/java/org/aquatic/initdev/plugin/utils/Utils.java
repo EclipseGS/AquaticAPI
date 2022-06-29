@@ -1,7 +1,6 @@
 package org.aquatic.initdev.plugin.utils;
 
 import org.aquatic.initdev.plugin.AquaticAPI;
-import org.aquatic.initdev.plugin.utils.color.Text;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;

@@ -1,7 +1,7 @@
 package org.aquatic.initdev.plugin.actions;
 
 import org.aquatic.initdev.plugin.AquaticAPI;
-import org.aquatic.initdev.plugin.utils.color.Text;
+import org.aquatic.initdev.plugin.utils.Text;
 import org.aquatic.initdev.plugin.utils.universal.XPotion;
 import org.aquatic.initdev.plugin.utils.universal.XSound;
 import org.bukkit.Bukkit;
@@ -12,7 +12,6 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.Nonnull;
 import java.util.Collection;
