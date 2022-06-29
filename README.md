@@ -20,7 +20,7 @@ How to import the API to your project with Maven:
    <dependency>
        <groupId>com.github.InitDev06</groupId>
        <artifactId>AquaticAPI</artifactId>
-       <version>1.0.1</version>
+       <version>1.0.2</version>
    </dependency>
 </dependencies>
 ```
