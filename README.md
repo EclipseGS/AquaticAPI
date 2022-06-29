@@ -99,8 +99,8 @@ public void onTitle(PlayerChangedWorldEvent event) {
 Now we see the 'Utils' class.
 This class provides methods for send titles, action-bars, or also disconnect to a player from server.
 
-Also can colorize the strings with normal colors, or gradients, solids or rainbow colors,
-this with the class 'Text', what uses methods of IridiumAPI for the colors.
+Also can colorize the strings with normal colors, or hex colors,
+this with the class 'Text'.
 ```java
 @EventHandler (priority = EventPriority.HIGH)
 public void onChat(AsyncPlayerChatEvent event) {
