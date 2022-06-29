@@ -6,7 +6,7 @@ API provided for members of Aquatic Studios for the plugins development, version
 
 ## Installation
 
-**How to import the API to your project with Maven:**
+How to import the API to your project with Maven:
 ```xml
 <repositories>
     <repository>
@@ -25,7 +25,7 @@ API provided for members of Aquatic Studios for the plugins development, version
 </dependencies>
 ```
 
-**How to import the API to your project with Gradle:**
+How to import the API to your project with Gradle:
 ```groovy
 repositories {
     mavenCentral()
@@ -39,7 +39,7 @@ dependencies { implementation 'com.github.InitDev0:AquaticAPI:1.0.0' }
 
 ## Usage
 
-**To use the API, you must be create an instance of this.**
+To use the API, you must be create an instance of this.
 ```java
 @Getter
 private AquaticAPI aquaticAPI;
@@ -52,8 +52,8 @@ public void onEnable() {
   getLogger().info("AquaticAPI Loaded Successful!");
 }
 ```
-**Now you can use the features of the API, as example, the ActionHandler.**
-**But also we get another class.**
+Now you can use the features of the API, as by example, the ActionHandler.
+But also we will get another class, the 'Utils' class.
 ```java
 private final ActionHandler actionHandler;
 private final Utils utils;
@@ -64,7 +64,7 @@ public TestClass(@NotNull AquaticAPI aquaticApi) {
 }
 ```
 
-**Replay a sound:**
+Replay a sound:
 ```java
 @EventHandler (priority = EventPriority.HIGH, ignoreCancelled = true)
 public void onSound(PlayerJoinEvent event) {
@@ -80,7 +80,7 @@ public void onSound(PlayerJoinEvent event) {
   actionHandler.sound(soundFormat, player);
 }
 ```
-**Or send a Title:**
+Or send a Title:
 ```java
 @EventHandler (priority = EventPriority.HIGH, ignoreCancelled = true)
 public void onTitle(PlayerChangedWorldEvent event) {
@@ -96,12 +96,11 @@ public void onTitle(PlayerChangedWorldEvent event) {
 }
 ```
 
-**Now we see the Utils class.**
+Now we see the 'Utils' class.
+This class provides methods for send titles, action-bars, or also disconnect to a player from server.
 
-**This class provides methods for send titles, action-bars, or also disconnect to a player from server.**
-
-**Also can colorize the strings with normal colors, or gradients, solids or rainbow colors.**
-**This with the class Text, what uses methods of IridiumAPI for the colors.**
+Also can colorize the strings with normal colors, or gradients, solids or rainbow colors,
+this with the class 'Text', what uses methods of IridiumAPI for the colors.
 ```java
 @EventHandler (priority = EventPriority.HIGH)
 public void onChat(AsyncPlayerChatEvent event) {
