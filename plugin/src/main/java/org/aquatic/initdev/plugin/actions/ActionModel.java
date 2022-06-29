@@ -1,6 +1,8 @@
 package org.aquatic.initdev.plugin.actions;
 
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 import java.util.Collection;
@@ -26,7 +28,7 @@ public interface ActionModel {
 	 * @param s Action Container.
 	 * @param player Player Parameter.
 	 */
-	void effect(@Nonnull String s, @Nonnull Player player);
+	void effect(@NotNull JavaPlugin plugin, @Nonnull String s, @Nonnull Player player);
 
 	/**
 	 * Send a title to player.
@@ -34,7 +36,7 @@ public interface ActionModel {
 	 * @param s Action Container.
 	 * @param player Player Parameter.
 	 */
-	void title(@Nonnull String s, @Nonnull Player player);
+	void title(@NotNull String s, @NotNull Player player);
 
 	/**
 	 * Send an actionbar to player.
@@ -42,7 +44,10 @@ public interface ActionModel {
 	 * @param s Action Container.
 	 * @param player Player Parameter.
 	 */
-	void actionbar(@Nonnull String s, @Nonnull Player player);
+	void actionbar(
+		@NotNull JavaPlugin plugin,
+		@NotNull String s,
+		@NotNull Player player);
 
 	/**
 	 * Disconnect to player.
@@ -50,7 +55,7 @@ public interface ActionModel {
 	 * @param s Action Container.
 	 * @param player Player Parameter.
 	 */
-	void disconnect(@Nonnull String s, @Nonnull Player player);
+	void disconnect(@NotNull String s, @NotNull Player player);
 
 	/**
 	 * Dispatch a command from console or the player.
@@ -58,7 +63,7 @@ public interface ActionModel {
 	 * @param s Action Container.
 	 * @param player Player Parameter.
 	 */
-	void command(@Nonnull String s, @Nonnull Player player);
+	void command(@NotNull JavaPlugin plugin, @NotNull String s, @NotNull Player player);
 
 	/**
 	 * Send a message to player.
@@ -66,7 +71,7 @@ public interface ActionModel {
 	 * @param s Action Container.
 	 * @param player Player Parameter.
 	 */
-	void message(@Nonnull String s, @Nonnull Player player);
+	void message(@NotNull String s, @NotNull Player player);
 
 	/**
 	 * Send a message to all players connected.
@@ -74,20 +79,24 @@ public interface ActionModel {
 	 * @param s Action Container.
 	 * @param players Players to send the message.
 	 */
-	void broadcast(@Nonnull String s, @Nonnull Collection<? extends Player> players);
+	void broadcast(@NotNull String s, @NotNull Collection<? extends Player> players);
 
 	/**
 	 * Send a message to console.
 	 *
 	 * @param s Action Container.
 	 */
-	void console(@Nonnull String s);
+	void console(@NotNull String s);
 
 	/**
 	 * Check can find any action and be executed.
 	 *
+	 * @param plugin Main class of the plugin what uses the API.
 	 * @param s Action Container.
 	 * @param player Player Parameter.
 	 */
-	void checkAndExecute(@Nonnull String s, @Nonnull Player player);
+	void checkAndExecute(
+		@NotNull JavaPlugin plugin,
+		@NotNull String s,
+		@NotNull Player player);
 }

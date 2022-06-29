@@ -7,9 +7,12 @@ import org.aquatic.initdev.plugin.utils.universal.XSound;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.Nonnull;
 import java.util.Collection;
@@ -77,7 +80,7 @@ public final class ActionHandler implements ActionModel {
 	 * @param player Player Parameter.
 	 */
 	@Override
-	public void effect(@Nonnull String s, @Nonnull Player player) {
+	public void effect(@NotNull JavaPlugin plugin, @Nonnull String s, @Nonnull Player player) {
 		// Clearing the Action identifier.
 		s = s.substring(10);
 
@@ -104,13 +107,27 @@ public final class ActionHandler implements ActionModel {
 			// Print the error.
 			e.printStackTrace();
 
-			// Could not parse the parameters
+			// Could not send the title.
 			System.out.println("[AquaticAPI] Action 'effect' return exit '1'.");
 			return;
 		}
 
-		// Add the potion effect, can?
-		player.addPotionEffect(new PotionEffect(effect, duration, amplifier));
+		// If the primary thread?
+		if (plugin.getServer().isPrimaryThread()) {
+			// Add the potion effect.
+			player.addPotionEffect(new PotionEffect(effect, duration, amplifier));
+			return;
+		}
+
+		// Is not the primary thread.
+		// Create a new instance of object BukkitRunnable, and run the task as Synchronous.
+		new BukkitRunnable() {
+			@Override
+			public void run() {
+				player.addPotionEffect(new PotionEffect(effect, duration, amplifier));
+				cancel();
+			}
+		}.runTaskLater(plugin, 2L);
 	}
 
 	/**
@@ -155,9 +172,8 @@ public final class ActionHandler implements ActionModel {
 
 		// Finally, send the title
 		// And yes can send the title.
-		main.getHandler()
-			.getServer()
-			.sendTitle(
+		main.getUtils()
+			.title(
 				player,
 				fadeIn,
 				stay,
@@ -174,17 +190,26 @@ public final class ActionHandler implements ActionModel {
 	 * @param player Player Parameter.
 	 */
 	@Override
-	public void actionbar(@Nonnull String s, @Nonnull Player player) {
+	public void actionbar(
+		@NotNull JavaPlugin plugin,
+		@Nonnull String s,
+		@Nonnull Player player) {
 		// Clearing the Action identifier.
 		s = s.substring(13);
 
+		String[] separators = s.split(":", 2);
+
+		String message = separators[0];
+		long duration = Long.parseLong(separators[1]);
+
 		// Getting the message and
 		// send the actionbar.
-		main.getHandler()
-			.getServer()
+		main.getUtils()
 			.actionBar(
+				plugin,
 				player,
-				s
+				s,
+				duration
 			);
 	}
 
@@ -201,9 +226,8 @@ public final class ActionHandler implements ActionModel {
 
 		// Getting the message and
 		// Disconnect to player.
-		main.getHandler()
-			.getServer()
-			.closeConnection(
+		main.getUtils()
+			.disconnect(
 				player,
 				s
 			);
@@ -216,7 +240,7 @@ public final class ActionHandler implements ActionModel {
 	 * @param player Player Parameter.
 	 */
 	@Override
-	public void command(@Nonnull String s, @Nonnull Player player) {
+	public void command(@NotNull JavaPlugin plugin, @Nonnull String s, @Nonnull Player player) {
 		// Clearing the Action identifier.
 		s = s.substring(11);
 
@@ -231,10 +255,24 @@ public final class ActionHandler implements ActionModel {
 		// Check if the boolean is true.
 		if (fromConsole) {
 			// Dispatch the command from console.
-			Bukkit.dispatchCommand(
-				Bukkit.getConsoleSender(),
-				command
-			);
+			// But before, is on the primary thread?
+			if (plugin.getServer().isPrimaryThread()) {
+				Bukkit.dispatchCommand(
+					Bukkit.getConsoleSender(),
+					command
+				);
+			} else {
+				new BukkitRunnable() {
+					@Override
+					public void run() {
+						Bukkit.dispatchCommand(
+							Bukkit.getConsoleSender(),
+							command
+						);
+						cancel();
+					}
+				}.runTaskLater(plugin, 1L);
+			}
 			return;
 		}
 
@@ -295,11 +333,15 @@ public final class ActionHandler implements ActionModel {
 	/**
 	 * Check can find any action and be executed.
 	 *
-	 * @param s      Action Container.
+	 * @param plugin Main class of the plugin what uses the API.
+	 * @param s Action Container.
 	 * @param player Player Parameter.
 	 */
 	@Override
-	public void checkAndExecute(@Nonnull String s, @Nonnull Player player) {
+	public void checkAndExecute(
+		@NotNull JavaPlugin plugin,
+		@NotNull String s,
+		@NotNull Player player) {
 		// The string starts with the '{#Sound}'  identifier?
 		if (s.startsWith(ActionFormat.SOUND.getIdentifier())) {
 			sound(s, player);
@@ -308,7 +350,7 @@ public final class ActionHandler implements ActionModel {
 
 		// The string starts with the '{#Effect}' identifier?
 		if (s.startsWith(ActionFormat.EFFECT.getIdentifier())) {
-			effect(s, player);
+			effect(plugin, s, player);
 			return;
 		}
 
@@ -320,7 +362,7 @@ public final class ActionHandler implements ActionModel {
 
 		// The string starts with the '{#ActionBar}' identifier?
 		if (s.startsWith(ActionFormat.ACTION_BAR.getIdentifier())) {
-			actionbar(s, player);
+			actionbar(plugin, s, player);
 			return;
 		}
 
@@ -332,7 +374,7 @@ public final class ActionHandler implements ActionModel {
 
 		// The string starts with the '{#Command}' identifier?
 		if (s.startsWith(ActionFormat.COMMAND.getIdentifier())) {
-			command(s, player);
+			command(plugin, s, player);
 			return;
 		}
 

@@ -1,0 +1,6 @@
+name: AquaticAPI
+main: org.aquatic.initdev.plugin.LoaderSpigot
+version: 1.0.0
+api-version: 1.13
+authors: [ InitDev ]
+description: API for send Titles and ActionBars, also give support to HEX colors, and more.
