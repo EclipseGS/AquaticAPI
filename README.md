@@ -34,7 +34,7 @@ repositories {
 ```
 
 ```groovy
-dependencies { implementation 'com.github.InitDev0:AquaticAPI:1.0.0' }
+dependencies { implementation 'com.github.InitDev06:AquaticAPI:1.0.0' }
 ```
 
 ## Usage
